@@ -31,13 +31,15 @@ def login():
     if not user:
         return jsonify({"message": "User not found"}), 404
 
+    from werkzeug.security import check_password_hash
     if not check_password_hash(user["password"], password):
         return jsonify({"message": "Invalid credentials"}), 401
 
     token = create_access_token(identity=email)
 
     return jsonify({
-        "message": "Login success",
+        "message": "Login successful",
         "token": token,
         "user": {"name": user["name"], "email": user["email"]}
     }), 200
+
