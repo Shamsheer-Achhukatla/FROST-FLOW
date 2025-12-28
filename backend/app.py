@@ -19,7 +19,8 @@ app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 CORS(app, resources={r"/*": {"origins": [
     "https://frost-flow.vercel.app",
     "http://localhost:3000"
-]}}, supports_credentials=True)
+]}}, methods=["GET", "POST", "OPTIONS"], allow_headers=["Content-Type"])
+
 
 JWTManager(app)
 

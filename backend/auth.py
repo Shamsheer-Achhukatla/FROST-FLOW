@@ -5,12 +5,11 @@ from database import users
 
 auth = Blueprint("auth", __name__)
 
+# ------------------ REGISTER ------------------
 @auth.route("/register", methods=["POST"])
 def register_user():
     try:
         data = request.get_json()
-        if not data:
-            return jsonify({"error": "No data received"}), 400
 
         name = data.get("name")
         email = data.get("email")
@@ -24,28 +23,37 @@ def register_user():
         
         hashed = generate_password_hash(password)
         users.insert_one({"name": name, "email": email, "password": hashed})
-        return jsonify({"message":"User Registered"}), 200
+
+        return jsonify({"message": "User Registered"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
+# ------------------ LOGIN ------------------
 @auth.route("/login", methods=["POST"])
-def login_user():
+def login():
     try:
         data = request.get_json()
-        if not data:
-            return jsonify({"error": "No data received"}), 400
-
         email = data.get("email")
         password = data.get("password")
 
         user = users.find_one({"email": email})
-        if not user or not check_password_hash(user["password"], password):
-            return jsonify({"error":"Invalid credentials"}), 401
+        if not user:
+            return jsonify({"message": "User not found"}), 404
 
-        token = create_access_token(identity=str(user["_id"]))
-        return jsonify({"token": token}), 200
+        # Password Check (IMPORTANT) 🔥
+        if not check_password_hash(user["password"], password):
+            return jsonify({"message": "Invalid credentials"}), 401
+
+        # Create token
+        token = create_access_token(identity=email)
+
+        return jsonify({
+            "message": "Login successful",
+            "token": token,
+            "user": {"name": user["name"], "email": user["email"]}
+        }), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
