@@ -3,7 +3,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
 from database import users
 
+
 auth = Blueprint("auth", __name__)
+
+@auth.route("/login", methods=["OPTIONS"])
+@auth.route("/register", methods=["OPTIONS"])
+def handle_options():
+    return jsonify({"status": "OK"}), 200
 
 @auth.route("/register", methods=["POST"])
 def register_user():
