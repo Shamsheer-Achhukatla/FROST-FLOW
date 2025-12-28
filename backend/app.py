@@ -1,36 +1,25 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from auth import auth
 from dotenv import load_dotenv
 import os
 
-# Blueprints
-from auth import auth
-from service import service
-from products import product
-from database import orders, bookings
-
 load_dotenv()
-
 app = Flask(__name__)
 
-# SECRET KEY
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "fallbacksecret123")
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
-# FULL CORS FOR FRONTEND
-CORS(app, resources={r"/*": {"origins": ["https://frost-flow.vercel.app", "http://localhost:3000"]}},
-     supports_credentials=True)
+CORS(app, resources={r"*": {"origins": "*"}}, supports_credentials=True)
 
 JWTManager(app)
 
-# REGISTER ROUTES
 app.register_blueprint(auth, url_prefix="/auth")
-app.register_blueprint(service, url_prefix="/service")
-app.register_blueprint(product, url_prefix="/products")
 
 @app.route("/")
 def home():
-    return jsonify({"message": "Frost & Flow Backend Running"}), 200
+    return jsonify({"message": "Backend Online"}), 200
+
 
 # SAVE ORDER
 @app.route("/save-order", methods=["POST"])
