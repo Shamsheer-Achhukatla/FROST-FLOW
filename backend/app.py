@@ -16,7 +16,10 @@ app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
 # FULL CORS FIX 🔥
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": [
+    "https://frost-flow.vercel.app",
+    "http://localhost:3000"
+]}}, supports_credentials=True)
 
 JWTManager(app)
 
@@ -54,4 +57,4 @@ def get_orders(email):
     return jsonify(user_orders), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
