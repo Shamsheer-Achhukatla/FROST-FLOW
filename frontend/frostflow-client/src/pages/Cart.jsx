@@ -26,7 +26,7 @@ export default function Cart(){
     if (!user) return alert("Login required first!");
 
     for (let item of cart) {
-      await fetch("http://127.0.0.1:5000/save-order", {
+      await fetch("https://frost-flow.onrender.com/save-order", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({

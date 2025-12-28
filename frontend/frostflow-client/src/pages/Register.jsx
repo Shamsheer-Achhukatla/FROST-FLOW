@@ -10,7 +10,7 @@ export default function Register(){
 
   const registerUser = async () => {
     try {
-      await axios.post("http://127.0.0.1:5000/auth/register", {name, email, password});
+      await axios.post("https://frost-flow.onrender.com/register", {name, email, password});
       alert("Account Created! Please Login.");
       window.location.href = "/login";
     } catch {

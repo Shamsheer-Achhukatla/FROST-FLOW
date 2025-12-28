@@ -9,7 +9,7 @@ export default function Login(){
 
   const loginUser = async () => {
     try {
-      const res = await axios.post("http://127.0.0.1:5000/auth/login", { email, password });
+      const res = await axios.post("https://frost-flow.onrender.com/auth/login", { email, password });
 
     // SAVE TOKEN
       localStorage.setItem("token", res.data.token);

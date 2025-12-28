@@ -20,7 +20,7 @@ export default function Booking(){
     }
 
     // ⭐ Save to backend MongoDB
-    await fetch("http://127.0.0.1:5000/save-booking", {
+    await fetch("https://frost-flow.onrender.com/save-booking", {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
