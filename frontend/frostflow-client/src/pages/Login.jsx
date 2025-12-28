@@ -9,11 +9,8 @@ export default function Login(){
 
   const loginUser = async () => {
   try {
-    const res = await axios.post(
-      "https://frost-flow.onrender.com/auth/login",
-      { email, password },
-      { headers: { "Content-Type": "application/json" } }
-    );
+    const API = "https://frost-flow.onrender.com";
+    await axios.post(`${API}/auth/login`, { email, password });
 
     console.log("SERVER RESPONSE:", res.data);
 

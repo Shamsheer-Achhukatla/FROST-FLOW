@@ -10,11 +10,9 @@ export default function Register(){
 
   const registerUser = async () => {
     try {
-      const res = await axios.post(
-        "https://frost-flow.onrender.com/auth/register",
-        { name, email, password },
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const API = "https://frost-flow.onrender.com";
+      await axios.post(`${API}/auth/login`, { email, password });
+
 
 
       alert("Account Created! Please Login.");
