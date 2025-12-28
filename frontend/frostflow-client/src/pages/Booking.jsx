@@ -25,13 +25,11 @@ export default function Booking(){
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
         user: user.email,
-        service,
-        acType,
-        date,
-        address,
+        service, acType, date, address,
         status: "Scheduled"
       })
     });
+
 
     // ⭐ Save to LocalStorage (backup view)
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];

@@ -6,7 +6,7 @@ from database import users
 auth = Blueprint("auth", __name__)
 
 @auth.route("/register", methods=["POST"])
-def register():
+def register_user():
     try:
         data = request.get_json()
         if not data:
@@ -24,14 +24,14 @@ def register():
         
         hashed = generate_password_hash(password)
         users.insert_one({"name": name, "email": email, "password": hashed})
-        return jsonify({"message":"Registered successfully!"}), 201
+        return jsonify({"message":"User Registered"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
 @auth.route("/login", methods=["POST"])
-def login():
+def login_user():
     try:
         data = request.get_json()
         if not data:
