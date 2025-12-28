@@ -42,17 +42,19 @@ def login():
         if not user:
             return jsonify({"message": "User not found"}), 404
 
-        # Password Check (IMPORTANT) 🔥
+        # FIX: verify hashed password
         if not check_password_hash(user["password"], password):
             return jsonify({"message": "Invalid credentials"}), 401
 
-        # Create token
         token = create_access_token(identity=email)
 
         return jsonify({
             "message": "Login successful",
             "token": token,
-            "user": {"name": user["name"], "email": user["email"]}
+            "user": {
+                "email": user["email"],
+                "name": user["name"],
+            }
         }), 200
 
     except Exception as e:

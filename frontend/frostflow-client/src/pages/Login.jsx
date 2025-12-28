@@ -8,42 +8,36 @@ export default function Login(){
   const [password, setPassword] = useState("");
 
   const loginUser = async () => {
-    try {
-      const res = await axios.post("https://frost-flow.onrender.com/auth/login",
-        { email, password },
-        { headers: { "Content-Type": "application/json" } }
-      );
+  try {
+    const res = await axios.post(
+      "https://frost-flow.onrender.com/auth/login",
+      { email, password },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
+    console.log("SERVER RESPONSE:", res.data);
 
-    // SAVE TOKEN
       localStorage.setItem("token", res.data.token);
-
-    // SAVE USER BASIC INFO
-      localStorage.setItem("user", JSON.stringify({
-        name: email.split("@")[0],
-        email: email,
-        profileIcon: "default"
-      }));
-
-      alert("Login Successful!");
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      
+      alert("Login Success");
       window.location.href = "/dashboard";
 
-    } catch {
-      alert("Invalid credentials");
+    } catch (error) {
+      alert(error.response?.data?.message || "Invalid Credentials");
     }
   };
 
-
   return (
     <div className="page-center">
-        <BackButton />
+      <BackButton />
       <div className="glass-card">
         <h2 className="ice-logo">LOGIN ❄</h2>
 
         <input className="input-box" placeholder="Email"
           onChange={e => setEmail(e.target.value)} />
 
-        <input className="input-box" type="password" placeholder="Password"
+        <input className="input-box" placeholder="Password" type="password"
           onChange={e => setPassword(e.target.value)} />
 
         <button className="action-button" onClick={loginUser}>Login</button>
