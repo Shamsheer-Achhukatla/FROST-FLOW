@@ -42,7 +42,6 @@ def login():
         if not user:
             return jsonify({"message": "User not found"}), 404
 
-        # FIX: verify hashed password
         if not check_password_hash(user["password"], password):
             return jsonify({"message": "Invalid credentials"}), 401
 
@@ -51,10 +50,7 @@ def login():
         return jsonify({
             "message": "Login successful",
             "token": token,
-            "user": {
-                "email": user["email"],
-                "name": user["name"],
-            }
+            "user": {"name": user["name"], "email": user["email"]}
         }), 200
 
     except Exception as e:

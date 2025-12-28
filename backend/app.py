@@ -13,14 +13,20 @@ load_dotenv()
 app = Flask(__name__)
 
 # Secret Key
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
 # FULL CORS FIX 🔥
-CORS(app, resources={r"/*": {"origins": [
-    "https://frost-flow.vercel.app",
-    "http://localhost:3000"
-]}}, methods=["GET", "POST", "OPTIONS"], allow_headers=["Content-Type"])
 
+
+CORS(app,
+     resources={r"/*": {"origins": ["https://frost-flow.vercel.app", "http://localhost:3000"]}},
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"],
+     expose_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+)
 
 JWTManager(app)
 
