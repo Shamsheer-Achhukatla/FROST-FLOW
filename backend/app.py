@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from auth import auth
 from service import service as service_routes
-from products import product   # import blueprint
+from products import product
 from database import orders, bookings
 from dotenv import load_dotenv
 import os
@@ -11,35 +11,28 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-
-# Secret Key
-app.config['CORS_HEADERS'] = 'Content-Type'
-
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
-# FULL CORS FIX 🔥
+# ⭐ FULL CORS FIX (REQUIRED FOR VERCEL) ⭐
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-
-CORS(app,
-     resources={r"/*": {"origins": ["https://frost-flow.vercel.app", "http://localhost:3000"]}},
-     supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization"],
-     expose_headers=["Content-Type", "Authorization"],
-     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-)
+# If you want to restrict only these:
+# CORS(app, origins=[
+#     "https://frost-flow.vercel.app",
+#     "https://frost-flow.onrender.com",
+#     "http://localhost:3000"
+# ])
 
 JWTManager(app)
 
-# Routes
+# ROUTES
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(service_routes, url_prefix="/service")
 app.register_blueprint(product, url_prefix="/products")
 
-
-
 @app.route("/")
 def home():
-    return jsonify({"message": "Frost & Flow Backend Running ✔"})
+    return jsonify({"status": "Backend LIVE on Render! 🚀"}), 200
 
 # Save Product Order
 @app.route("/save-order", methods=["POST"])
@@ -62,6 +55,10 @@ def get_orders(email):
     for item in user_orders:
         item["_id"] = str(item["_id"]) # convert for JSON
     return jsonify(user_orders), 200
+
+@app.route("/healthz")
+def health():
+    return "OK", 200
 
 if __name__ == "__main__":
     app.run()
