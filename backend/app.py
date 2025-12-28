@@ -1,24 +1,24 @@
+# app.py
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from auth import auth
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
 app = Flask(__name__)
-
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
-CORS(app, resources={r"*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, 
+     origins=["https://frost-flow.vercel.app"], 
+     supports_credentials=True)
 
 JWTManager(app)
-
 app.register_blueprint(auth, url_prefix="/auth")
 
 @app.route("/")
 def home():
-    return jsonify({"message": "Backend Online"}), 200
+    return jsonify({"status": "Backend Live"}), 200
+
 
 
 # SAVE ORDER
