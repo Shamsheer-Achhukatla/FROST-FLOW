@@ -12,60 +12,35 @@ def handle_options():
     return jsonify({"status": "CORS OK"}), 200
 
 
-# ------------------- REGISTER USER -------------------------
+# REGISTER
 @auth.route("/register", methods=["POST"])
 def register_user():
-    try:
-        data = request.get_json()
+    data = request.get_json()
+    hashed = generate_password_hash(data["password"])
+    users.insert_one({
+        "name": data["name"],
+        "email": data["email"],
+        "password": hashed
+    })
+    return jsonify({"message": "Registered"}), 200
 
-        name = data.get("name")
-        email = data.get("email")
-        password = data.get("password")
-
-        if not name or not email or not password:
-            return jsonify({"message": "Missing fields"}), 400
-
-        # Check if user exists
-        if users.find_one({"email": email}):
-            return jsonify({"message": "User already exists"}), 400
-
-        # Hash password before storing
-        hashed = generate_password_hash(password)
-        users.insert_one({"name": name, "email": email, "password": hashed})
-
-        return jsonify({"message": "Registration successful"}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# ------------------- LOGIN USER ----------------------------
+# LOGIN
 @auth.route("/login", methods=["POST"])
 def login():
-    try:
-        data = request.get_json()
-        email = data.get("email")
-        password = data.get("password")
+    data = request.get_json()
+    user = users.find_one({"email": data["email"]})
 
-        user = users.find_one({"email": email})
-        if not user:
-            return jsonify({"message": "User not found"}), 404
+    if not user:
+        return jsonify({"message": "User not found"}), 404
 
-        # Check password securely
-        if not check_password_hash(user["password"], password):
-            return jsonify({"message": "Invalid credentials"}), 401
+    if not check_password_hash(user["password"], data["password"]):
+        return jsonify({"message": "Invalid credentials"}), 401
 
-        # Create JWT token for session
-        token = create_access_token(identity=email)
+    token = create_access_token(identity=data["email"])
+    return jsonify({
+        "message": "Login OK",
+        "token": token,
+        "user": {"name": user["name"], "email": user["email"]}
+    }), 200
 
-        return jsonify({
-            "message": "Login successful",
-            "token": token,
-            "user": {
-                "name": user["name"],
-                "email": user["email"]
-            }
-        }), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    

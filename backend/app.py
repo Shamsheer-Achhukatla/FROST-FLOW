@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from auth import auth
-from service import service as service_routes
+from service import service_routes
 from products import product
 from database import orders, bookings
 from dotenv import load_dotenv
@@ -11,30 +11,30 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
-# ---------------- JWT Secret ----------------
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "default-secret-key")
+# CORS FIX
+CORS(app, origins=[
+    "https://frost-flow.vercel.app",
+    "http://localhost:3000"
+], supports_credentials=True)
 
-# ---------------- FULL CORS FIX 🚀 ----------------
-CORS(
-    app,
-    resources={r"/*": {"origins": ["https://frost-flow.vercel.app", "http://localhost:3000"]}},
-    supports_credentials=True,
-    allow_headers=["Content-Type", "Authorization"],
-    expose_headers=["Content-Type", "Authorization"],
-    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-)
+@app.after_request
+def apply_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://frost-flow.vercel.app"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    return response
 
 JWTManager(app)
 
-# ---------------- ROUTES ----------------
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(service_routes, url_prefix="/service")
 app.register_blueprint(product, url_prefix="/products")
 
 @app.route("/")
 def home():
-    return jsonify({"message": "Backend Running Successfully ✔"}), 200
+    return jsonify({"message": "Backend live ✔"}), 200
 
 
 # -------- SAVE ORDER --------
@@ -64,4 +64,4 @@ def get_orders(email):
 
 # -------- SERVER START --------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run()
