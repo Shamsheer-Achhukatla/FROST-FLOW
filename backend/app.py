@@ -11,56 +11,57 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
-# ⭐ FULL CORS FIX (ALLOW VERCEL)
-CORS(app, resources={r"/*": {"origins": "*"}})
+# ---------------- JWT Secret ----------------
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "default-secret-key")
 
-@app.after_request
-def apply_cors(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://frost-flow.vercel.app"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    return response
+# ---------------- FULL CORS FIX 🚀 ----------------
+CORS(
+    app,
+    resources={r"/*": {"origins": ["https://frost-flow.vercel.app", "http://localhost:3000"]}},
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+    expose_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+)
 
 JWTManager(app)
 
-# ROUTES
+# ---------------- ROUTES ----------------
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(service_routes, url_prefix="/service")
 app.register_blueprint(product, url_prefix="/products")
 
 @app.route("/")
 def home():
-    return jsonify({"message": "Backend LIVE 🚀"}), 200
+    return jsonify({"message": "Backend Running Successfully ✔"}), 200
 
 
-# Save Product Order
+# -------- SAVE ORDER --------
 @app.route("/save-order", methods=["POST"])
 def save_order():
-    data = request.json
+    data = request.get_json()
     orders.insert_one(data)
     return jsonify({"message": "Order saved successfully"}), 200
 
-# Save Booking
+
+# -------- SAVE BOOKING --------
 @app.route("/save-booking", methods=["POST"])
 def save_booking():
-    data = request.json
+    data = request.get_json()
     bookings.insert_one(data)
     return jsonify({"message": "Booking saved successfully"}), 200
 
-# Get Orders (User-specific)
+
+# -------- VIEW ORDERS --------
 @app.route("/get-orders/<email>", methods=["GET"])
 def get_orders(email):
     user_orders = list(orders.find({"user": email}))
     for item in user_orders:
-        item["_id"] = str(item["_id"]) # convert for JSON
+        item["_id"] = str(item["_id"])
     return jsonify(user_orders), 200
 
-@app.route("/healthz")
-def health():
-    return "OK", 200
 
+# -------- SERVER START --------
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=10000)
