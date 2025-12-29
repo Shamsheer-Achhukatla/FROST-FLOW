@@ -1,13 +1,12 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://your-backend-render-url.com", // 🔧 CHANGE THIS
+  baseURL: import.meta.env.VITE_API_URL, // Vite format
 });
 
-// Attach token
-API.interceptors.request.use((config) => {
+API.interceptors.request.use((config)=>{
   const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if(token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 

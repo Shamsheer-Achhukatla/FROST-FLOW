@@ -1,5 +1,8 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { spawnIceParticles } from "./snow";   // <-- PASTE HERE
+
+spawnIceParticles(); // <-- PASTE BELOW IMPORTS
 
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -10,8 +13,7 @@ import Booking from "./pages/Booking";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
-import { spawnIceParticles } from "../snow";
-spawnIceParticles();
+
 
 
 export default function App(){

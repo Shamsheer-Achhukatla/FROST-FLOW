@@ -5,21 +5,22 @@ from utils.jwt_handler import verify_token
 
 order = Blueprint("order", __name__)
 
-@order.route("/order/place", methods=["POST"])
-def place_order():
+@order.post("/save-order")
+def save_order():
     user = verify_token()
-    if not user: return jsonify({"msg": "Unauthorized"}), 401
+    if not user: 
+        return jsonify({"msg":"Unauthorized"}),401
 
     data = request.json
-    orders_col.insert_one({"user": user, "items": data, "status": "Pending"})
-    users_col.update_one({"_id": user}, {"$push": {"orders": data}, "$set": {"cart": []}})
+    orders_col.insert_one({"user": user, "items": data, "status":"Placed"})
+    return jsonify({"msg":"Order placed"}),201
 
-    return jsonify({"msg": "Order Placed"}), 200
 
-@order.route("/orders", methods=["GET"])
+@order.get("/")
 def get_orders():
     user = verify_token()
-    if not user: return jsonify({"msg": "Unauthorized"}), 401
+    if not user:
+        return jsonify({"msg":"Unauthorized"}),401
 
-    data = list(orders_col.find({"user": user}, {"_id": 0}))
-    return jsonify(data), 200
+    data = list(orders_col.find({"user": user}, {"_id":0}))
+    return jsonify(data),200

@@ -32,3 +32,19 @@ def login():
 
     token = create_token(str(user["_id"]))
     return jsonify({"token": token, "msg": "Login Success"}), 200
+
+@auth.get("/me")
+def me():
+    user = verify_token()
+    if not user: return jsonify({"msg":"Unauthorized"}),401
+    data = users_col.find_one({"_id": ObjectId(user)}, {"password":0})
+    return jsonify(data),200
+
+@auth.get("/me")
+def me():
+    user = verify_token()
+    if not user: return jsonify({"msg":"Unauthorized"}),401
+
+    data = users_col.find_one({"_id": ObjectId(user)}, {"password":0})
+    return jsonify(data),200
+

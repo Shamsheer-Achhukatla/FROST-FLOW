@@ -20,8 +20,10 @@ JWTManager(app)
 
 # CORS / FRONTEND CONNECTION
 CORS(app,
-     resources={r"/*": {"origins": os.getenv("FRONTEND_URL")}},
-     supports_credentials=True)
+ resources={r"/*": {"origins": os.getenv("FRONTEND_URL")}},
+ supports_credentials=True,
+ allow_headers=["Content-Type", "Authorization"]
+)
 
 # HTTPS REDIRECT FOR RENDER
 @app.before_request

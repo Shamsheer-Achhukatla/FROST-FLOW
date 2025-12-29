@@ -28,3 +28,11 @@ def remove_from_cart():
     data = request.json
     users_col.update_one({"_id": user}, {"$pull": {"cart": data}})
     return jsonify({"msg": "Removed"}), 200
+
+@product.get("/cart")
+def get_cart():
+    user = verify_token()
+    if not user: return jsonify({"msg":"Unauthorized"}),401
+
+    data = users_col.find_one({"_id": ObjectId(user)}, {"cart":1, "_id":0})
+    return jsonify(data["cart"]),200

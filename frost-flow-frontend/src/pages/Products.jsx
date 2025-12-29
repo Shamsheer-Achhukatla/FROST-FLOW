@@ -15,7 +15,12 @@ export default function Products(){
         <div key={p._id} className="frost-card">
           <h3>{p.name}</h3>
           <p>₹{p.price}</p>
-          <button className="frost-button">Add to Cart</button>
+          <button
+            className="frost-button"
+            onClick={() => API.post("/products/cart/add", p).then(()=>alert("Added to cart!"))}
+          >
+            Add to Cart
+          </button>
         </div>
       ))}
     </div>

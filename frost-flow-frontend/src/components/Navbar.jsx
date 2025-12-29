@@ -11,9 +11,6 @@ export default function Navbar(){
         animation: "slideDown 1s ease forwards"
       }}
     >
-
-    
-     style={{display:'flex',gap:'20px',padding:'20px',backdropFilter:'blur(10px)'}}
      
       <Link to="/">Home</Link>
       <Link to="/products">Products</Link>
