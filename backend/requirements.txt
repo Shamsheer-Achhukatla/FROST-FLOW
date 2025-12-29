@@ -1,5 +1,5 @@
 flask
-pymongo[srv]
+pymongo
 dnspython
 flask-cors
 flask-jwt-extended
