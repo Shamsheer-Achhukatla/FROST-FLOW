@@ -1,43 +1,36 @@
-# auth.py
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
-from database import users
+from database import users_collection
 
 auth = Blueprint("auth", __name__)
 
-@auth.route("/register", methods=["POST", "OPTIONS"])
-def register_user():
-    if request.method == "OPTIONS": return '', 200
+# REGISTER
+@auth.post("/auth/register")
+def register():
     data = request.json
+    email = data.get("email")
+    password = data.get("password")
 
-    if users.find_one({"email": data["email"]}):
+    if users_collection.find_one({"email": email}):
         return jsonify({"message": "User already exists"}), 400
 
-    users.insert_one({
-        "name": data["name"],
-        "email": data["email"],
-        "password": generate_password_hash(data["password"])
-    })
+    hashed_pw = generate_password_hash(password)
+    users_collection.insert_one({"email": email, "password": hashed_pw})
 
-    return jsonify({"message": "Registered ✔"}), 200
+    return jsonify({"message": "Registration successful"}), 201
 
 
-@auth.route("/login", methods=["POST", "OPTIONS"])
+# LOGIN
+@auth.post("/auth/login")
 def login():
-    if request.method == "OPTIONS": return '', 200
     data = request.json
-    user = users.find_one({"email": data["email"]})
+    email = data.get("email")
+    password = data.get("password")
 
-    if not user:
-        return jsonify({"message": "User not found"}), 404
-    
-    if not check_password_hash(user["password"], data["password"]):
-        return jsonify({"message": "Invalid credentials"}), 401
+    user = users_collection.find_one({"email": email})
+    if not user or not check_password_hash(user["password"], password):
+        return jsonify({"message": "Invalid email or password"}), 401
 
-    token = create_access_token(identity=data["email"])
-    return jsonify({
-        "message": "Login OK",
-        "token": token,
-        "user": {"name": user["name"], "email": user["email"]}
-    }), 200
+    token = create_access_token(identity=email)
+    return jsonify({"token": token, "message": "Login success"}), 200
