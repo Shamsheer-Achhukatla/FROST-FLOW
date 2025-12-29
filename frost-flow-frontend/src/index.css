@@ -1,0 +1,137 @@
+:root{
+  --frost-white:#B5E8FF;
+  --neon-blue:#00E5FF;
+  --icy-blue:#AFFFFF;
+  --dark-bg:#0A1A2F;
+}
+
+body{
+  margin:0;
+  background: linear-gradient(135deg,#0A1A2F,#04203f);
+  font-family: 'Poppins', sans-serif;
+  color:white;
+}
+
+.frost-card{
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(14px);
+  box-shadow:0 0 25px rgba(0,229,255,0.4);
+  border-radius: 18px;
+  padding: 25px;
+  margin: 20px auto;
+  width: 85%;
+}
+
+.frost-input{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid var(--icy-blue);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  color:white;
+  margin-bottom:15px;
+}
+
+.frost-input:focus{
+  outline:none;
+  border:2px solid var(--neon-blue);
+  box-shadow:0 0 10px var(--neon-blue);
+}
+
+.frost-button{
+  padding:10px 20px;
+  background: var(--neon-blue);
+  color:#002;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.25s;
+}
+
+.frost-button:hover{
+  background:#AFFFFF;
+  box-shadow:0 0 20px var(--neon-blue);
+  transform: scale(1.05);
+}
+
+/* ===========================
+   FROST & FLOW ANIMATIONS ❄
+=========================== */
+
+/* Neon glow hover crack effect */
+.frost-button:hover {
+  animation: frostPulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes frostPulse {
+  from {
+    box-shadow: 0 0 10px #00E5FF, 0 0 20px #AFFFFF inset;
+  }
+  to {
+    box-shadow: 0 0 30px #00E5FF, 0 0 60px #AFFFFF inset;
+  }
+}
+
+/* Glass card float animation */
+.frost-card {
+  animation: floatUp 4s ease-in-out infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Title ice glow */
+h1, h2 {
+  text-shadow: 0 0 10px #00E5FF, 0 0 25px #AFFFFF;
+  animation: titleGlow 3s infinite alternate;
+}
+@keyframes titleGlow {
+  from { text-shadow: 0 0 10px #00E5FF; }
+  to { text-shadow: 0 0 25px #AFFFFF, 0 0 45px #00E5FF; }
+}
+
+/* Snow layer */
+.snow {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background-image: url("https://assets.codepen.io/13471/snow.png"), 
+                    url("https://assets.codepen.io/13471/snow2.png"), 
+                    url("https://assets.codepen.io/13471/snow3.png");
+  animation: snowFall 25s linear infinite;
+}
+@keyframes snowFall {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to { background-position: 500px 2000px, 400px 1500px, 300px 1000px; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.frost-card:hover {
+  transform: scale(1.03);
+  border-color: #00E5FF;
+  box-shadow: 0 0 25px #00E5FF, 0 0 45px #AFFFFF inset;
+  transition: 0.3s ease-in-out;
+}
+
+.flake{
+  position:fixed;
+  width:8px;height:8px;
+  background: #AFFFFF;
+  border-radius:50%;
+  filter:blur(1px);
+  animation: drift linear forwards;
+}
+@keyframes drift {
+  from { transform: translateY(-20px); }
+  to { transform: translateY(100vh); }
+}
+

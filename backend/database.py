@@ -5,10 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
-client = MongoClient(MONGO_URI)
-db = client["frostandflow"]  # database name
+client = MongoClient(MONGO_URI, tls=True, tlsAllowInvalidCertificates=True)  # SSL FIX
+db = client.frostflow
 
-users_collection = db["users"]
-products_collection = db["products"]
-orders_collection = db["orders"]
-service_collection = db["service"]
+# Collections
+users_col = db.users
+products_col = db.products
+orders_col = db.orders
+bookings_col = db.bookings
+services_col = db.services
