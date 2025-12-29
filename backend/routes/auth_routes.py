@@ -1,6 +1,6 @@
 # routes/auth_routes.py
 from flask import Blueprint, request, jsonify
-from utils.db_connection import users_col
+from database import users_col, products_col, orders_col, services_col
 from utils.password_hash import hash_password, verify_password
 from utils.jwt_handler import create_token
 

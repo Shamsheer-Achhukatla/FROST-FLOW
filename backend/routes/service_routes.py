@@ -1,6 +1,6 @@
 # routes/service_routes.py
 from flask import Blueprint, request, jsonify
-from utils.db_connection import services_col
+from database import users_col, products_col, orders_col, services_col
 from utils.jwt_handler import verify_token
 
 service = Blueprint("service", __name__)
