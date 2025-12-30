@@ -22,11 +22,14 @@ JWTManager(app)
 
 # CORS / FRONTEND CONNECTION
 CORS(app,
- resources={r"/*": {"origins": os.getenv("FRONTEND_URL")}},
- supports_credentials=True,
- allow_headers=["Content-Type", "Authorization"]
+     resources={r"/*": {"origins": [
+         "https://frost-flow.vercel.app",
+         "http://frost-flow.vercel.app",
+         "http://localhost:5173"
+     ]}},
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"]
 )
-
 # HTTPS REDIRECT FOR RENDER
 
 
