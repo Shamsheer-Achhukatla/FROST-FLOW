@@ -8,3 +8,4 @@ werkzeug
 PyJWT
 gunicorn
 waitress
+echo "flask\nflask-cors\npymongo\npython-dotenv\npyjwt\ngunicorn"
