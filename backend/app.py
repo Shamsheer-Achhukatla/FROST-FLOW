@@ -28,12 +28,7 @@ CORS(app,
 )
 
 # HTTPS REDIRECT FOR RENDER
-@app.before_request
-def before_request():
-    # Trust Render's proxy header
-    if request.headers.get("X-Forwarded-Proto", "http") == "http":
-        url = request.url.replace("http://", "https://", 1)
-        return redirect(url, code=301)
+
 
 # ROUTES
 app.register_blueprint(auth, url_prefix="/auth")
