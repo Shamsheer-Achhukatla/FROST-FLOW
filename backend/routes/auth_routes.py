@@ -2,7 +2,7 @@
 from flask import Blueprint, request, jsonify
 from database import users_col, products_col, orders_col, services_col
 from utils.password_hash import hash_password, verify_password
-from utils.jwt_handler import create_token
+from utils.jwt_handler import create_token, verify_token
 from bson import ObjectId
 
 auth = Blueprint("auth", __name__)
@@ -36,10 +36,11 @@ def login():
 
 @auth.get("/me")
 def me():
-    user = verify_token()
-    if not user: return jsonify({"msg":"Unauthorized"}),401
-    data = users_col.find_one({"_id": ObjectId(user)}, {"password":0})
-    return jsonify(data),200
+    user_id = verify_token()  # token → id
+    if not user_id:
+        return jsonify({"msg": "Unauthorized"}), 401
 
+    user = users_col.find_one({"_id": ObjectId(user_id)}, {"password": 0})
+    return jsonify(user), 200
 
 
