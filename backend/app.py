@@ -40,9 +40,13 @@ app.register_blueprint(service, url_prefix="/service")
 def home():
     return jsonify({"message": "Frost & Flow Backend Running"}), 200
 
+@app.before_request
+def before_request():
+    if request.headers.get("X-Forwarded-Proto") == "http":
+        return redirect(request.url.replace("http://", "https://"))
+
+
 if __name__ == "__main__":
     from waitress import serve
-    import os
-    port = int(os.environ.get("PORT", 5000))  # Render chooses port automatically
-    serve(app, host="0.0.0.0", port=port)
+    serve(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
