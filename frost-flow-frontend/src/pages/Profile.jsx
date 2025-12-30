@@ -1,5 +1,5 @@
 import {useEffect,useState} from "react";
-import API from "../api.js";
+import API from "../api/api.js";
 export default function Profile(){
   const [user,setUser]=useState({});
   useEffect(()=>{API.get("/auth/me").then(r=>setUser(r.data))},[]);
