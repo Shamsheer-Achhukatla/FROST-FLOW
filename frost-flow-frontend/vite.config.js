@@ -5,15 +5,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: [
-        "fs",
-        "path",
-        "crypto",
-        "jsonwebtoken",
-      ],
+      external: [], // 🚫 no node modules here
     },
-  },
-  server: {
-    port: 5173,
   },
 });
