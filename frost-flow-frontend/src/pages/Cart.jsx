@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import API from "../api";
+import API from "../api.js";
 
 export default function Cart(){
   const [cart,setCart]=useState([]);
