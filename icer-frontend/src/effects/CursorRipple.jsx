@@ -5,12 +5,12 @@ export default function CursorRipple() {
     const cursor = document.createElement("div");
 
     cursor.style.position = "fixed";
-    cursor.style.width = "25px";
-    cursor.style.height = "25px";
-    cursor.style.borderRadius = "50%";
+    cursor.style.width = "2px";
+    cursor.style.height = "5px";
+    cursor.style.borderRadius = "5%";
     cursor.style.pointerEvents = "none";
     cursor.style.background = "rgba(0,255,255,0.25)";
-    cursor.style.boxShadow = "0 0 20px cyan";
+    cursor.style.boxShadow = "0 0 2px cyan";
     cursor.style.transform = "translate(-50%, -50%)";
     cursor.style.transition = "transform 0.08s ease-out";
     cursor.style.zIndex = "9999";
