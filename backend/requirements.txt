@@ -1,0 +1,10 @@
+flask
+pymongo
+dnspython
+flask-cors
+flask-jwt-extended
+python-dotenv
+werkzeug
+PyJWT
+gunicorn
+waitress
