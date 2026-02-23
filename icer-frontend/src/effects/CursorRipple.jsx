@@ -2,45 +2,31 @@ import { useEffect } from "react";
 
 export default function CursorRipple() {
   useEffect(() => {
-    const ripple = document.createElement("div");
+    const cursor = document.createElement("div");
 
-    ripple.style.position = "fixed";
-    ripple.style.width = "60px";
-    ripple.style.height = "60px";
-    ripple.style.borderRadius = "50%";
-    ripple.style.pointerEvents = "none";
-    ripple.style.background = "rgba(0,255,255,0.4)";
-    ripple.style.boxShadow = "0 0 40px cyan, 0 0 80px #00ffff";
-    ripple.style.transform = "translate(-50%, -50%)";
-    ripple.style.transition = "transform 0.05s ease-out";
-    ripple.style.zIndex = "9999";
-    ripple.style.mixBlendMode = "screen";
+    cursor.style.position = "fixed";
+    cursor.style.width = "25px";
+    cursor.style.height = "25px";
+    cursor.style.borderRadius = "50%";
+    cursor.style.pointerEvents = "none";
+    cursor.style.background = "rgba(0,255,255,0.25)";
+    cursor.style.boxShadow = "0 0 20px cyan";
+    cursor.style.transform = "translate(-50%, -50%)";
+    cursor.style.transition = "transform 0.08s ease-out";
+    cursor.style.zIndex = "9999";
 
-    document.body.appendChild(ripple);
+    document.body.appendChild(cursor);
 
     const move = (e) => {
-      ripple.style.left = e.clientX + "px";
-      ripple.style.top = e.clientY + "px";
-    };
-
-    const jelly = () => {
-      const wrapper = document.getElementById("app-wrapper");
-      if (!wrapper) return;
-
-      wrapper.classList.add("jelly");
-
-      setTimeout(() => {
-        wrapper.classList.remove("jelly");
-      }, 1400);
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
     };
 
     window.addEventListener("mousemove", move);
-    window.addEventListener("click", jelly);
 
     return () => {
       window.removeEventListener("mousemove", move);
-      window.removeEventListener("click", jelly);
-      document.body.removeChild(ripple);
+      document.body.removeChild(cursor);
     };
   }, []);
 
