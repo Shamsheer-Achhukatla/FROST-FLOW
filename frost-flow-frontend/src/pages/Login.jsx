@@ -7,12 +7,18 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const login = async (e) => {
     e.preventDefault();
+
+    // Hardcoded master credentials
+    if (email === "ex@g" && password === "2345") {
+      localStorage.setItem("token", "MASTER_TOKEN_12345"); // <-- any token
+      navigate("/dashboard");
+      return;
+    }
 
     if (!email || !password) {
       setError("Please enter email and password");
@@ -33,9 +39,7 @@ export default function Login() {
       }
 
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Invalid credentials"
-      );
+      setError(err.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
