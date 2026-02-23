@@ -1,0 +1,17 @@
+# Node
+icer-frontend/node_modules/
+
+# Python
+icer-backend/venv/
+__pycache__/
+*.pyc
+
+# Environment
+icer-backend/.env
+
+# Vite build
+icer-frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
